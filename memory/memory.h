@@ -3,5 +3,6 @@
 
 void init_memory();
 void* alloc(int size);
+void dealloc(void* ptr);
 
 #endif

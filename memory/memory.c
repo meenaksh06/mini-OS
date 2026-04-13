@@ -18,3 +18,9 @@ void* alloc(int size) {
     free_ptr += size;
     return ptr;
 }
+
+void dealloc(void* ptr) {
+    // For Phase 1, we use a simple bump allocator.
+    // Full memory reclamation will be implemented in Phase 2
+    // when the Virtual File System is added.
+}
