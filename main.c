@@ -48,17 +48,25 @@ int main() {
             print_string("\n");
         }
         else if (str_compare(cmd, "add") || str_compare(cmd, "mul") || str_compare(cmd, "div") || str_compare(cmd, "mod")) {
+
             if (arg_count < 3) {
                 print_string("Error: Missing arguments. Use: <cmd> <a> <b>\n");
             } else {
                 int a = str_to_int(args[1]);
                 int b = str_to_int(args[2]);
                 int res = 0;
+
+                // 🔥 FIX: Handle division/modulo by zero
+                if ((str_compare(cmd, "div") || str_compare(cmd, "mod")) && b == 0) {
+                    print_string("Error: Undefined operation (division by zero)\n");
+                    continue;
+                }
+
                 if (str_compare(cmd, "add")) res = add(a, b);
-                if (str_compare(cmd, "mul")) res = multiply(a, b);
-                if (str_compare(cmd, "div")) res = divide(a, b);
-                if (str_compare(cmd, "mod")) res = mod(a, b);
-                
+                else if (str_compare(cmd, "mul")) res = multiply(a, b);
+                else if (str_compare(cmd, "div")) res = divide(a, b);
+                else if (str_compare(cmd, "mod")) res = mod(a, b);
+
                 print_string("Result: ");
                 print_string(int_to_str(res));
                 print_string("\n");
@@ -84,7 +92,7 @@ int main() {
             print_string("\nType 'help' for list of commands.\n");
         }
 
-        // Simple cleanup for Phase 1 simulation (real dealloc in Phase 2)
+        // Phase 1: Simple cleanup (full memory management in Phase 2)
         dealloc(input);
     }
 
