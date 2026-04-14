@@ -48,25 +48,37 @@ int main() {
             print_string("\n");
         }
         else if (str_compare(cmd, "add") || str_compare(cmd, "mul") || str_compare(cmd, "div") || str_compare(cmd, "mod")) {
-
             if (arg_count < 3) {
-                print_string("Error: Missing arguments. Use: <cmd> <a> <b>\n");
+                print_string("Error: Missing arguments. Use: <cmd> <a> <b> [c] ...\n");
             } else {
-                int a = str_to_int(args[1]);
-                int b = str_to_int(args[2]);
-                int res = 0;
-
-                // 🔥 FIX: Handle division/modulo by zero
-                if ((str_compare(cmd, "div") || str_compare(cmd, "mod")) && b == 0) {
-                    print_string("Error: Undefined operation (division by zero)\n");
-                    continue;
+                int res = str_to_int(args[1]);
+                
+                for (int i = 2; i < arg_count; i++) {
+                    int next_val = str_to_int(args[i]);
+                    
+                    if (str_compare(cmd, "add")) {
+                        res = add(res, next_val);
+                    } else if (str_compare(cmd, "mul")) {
+                        res = multiply(res, next_val);
+                    } else if (str_compare(cmd, "div")) {
+                        if (next_val == 0) {
+                            print_string("Error: Division by zero at argument ");
+                            print_string(int_to_str(i));
+                            print_string("\n");
+                            goto next_cmd;
+                        }
+                        res = divide(res, next_val);
+                    } else if (str_compare(cmd, "mod")) {
+                        if (next_val == 0) {
+                            print_string("Error: Modulo by zero at argument ");
+                            print_string(int_to_str(i));
+                            print_string("\n");
+                            goto next_cmd;
+                        }
+                        res = mod(res, next_val);
+                    }
                 }
-
-                if (str_compare(cmd, "add")) res = add(a, b);
-                else if (str_compare(cmd, "mul")) res = multiply(a, b);
-                else if (str_compare(cmd, "div")) res = divide(a, b);
-                else if (str_compare(cmd, "mod")) res = mod(a, b);
-
+                
                 print_string("Result: ");
                 print_string(int_to_str(res));
                 print_string("\n");
@@ -92,6 +104,7 @@ int main() {
             print_string("\nType 'help' for list of commands.\n");
         }
 
+        next_cmd:
         // Phase 1: Simple cleanup (full memory management in Phase 2)
         dealloc(input);
     }
