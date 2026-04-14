@@ -56,7 +56,6 @@ char* int_to_str(int num) {
 
     str[i] = '\0';
 
-    // reverse
     for (int j = 0; j < i / 2; j++) {
         char t = str[j];
         str[j] = str[i - j - 1];
@@ -71,7 +70,7 @@ char** str_split(char* str, char delim, int* count) {
     for (int i = 0; str[i]; i++) {
         if (str[i] == delim) n++;
     }
-    n++; // number of segments
+    n++; 
 
     char** res = (char**) alloc(n * sizeof(char*));
     int start = 0;

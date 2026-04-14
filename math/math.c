@@ -13,7 +13,7 @@ int multiply(int a, int b) {
 }
 
 int divide(int a, int b) {
-    if (b == 0) return 0;
+    if (b == 0) return 'Division by zero';
 
     int count = 0;
     while (a >= b) {
