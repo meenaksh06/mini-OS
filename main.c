@@ -3,6 +3,7 @@
 #include "memory/memory.h"
 #include "screen/screen.h"
 #include "keyboard/keyboard.h"
+#include "security/security.h"
 
 void show_boot_screen() {
     clear_screen();
@@ -28,6 +29,11 @@ int main() {
         char* input = read_line();
         if (str_len(input) == 0) continue;
 
+        if (!validate_input(input)) {
+            print_string("Security Alert: Invalid or malicious input detected!\n");
+            goto next_cmd;
+        }
+
         int arg_count = 0;
         char** args = str_split(input, ' ', &arg_count);
         char* cmd = args[0];
@@ -51,9 +57,19 @@ int main() {
             if (arg_count < 3) {
                 print_string("Error: Missing arguments. Use: <cmd> <a> <b> [c] ...\n");
             } else {
+                if (!is_numeric(args[1])) {
+                    print_string("Error: Argument 1 is not a valid number.\n");
+                    goto next_cmd;
+                }
                 int res = str_to_int(args[1]);
                 
                 for (int i = 2; i < arg_count; i++) {
+                    if (!is_numeric(args[i])) {
+                        print_string("Error: Argument ");
+                        print_string(int_to_str(i));
+                        print_string(" is not a valid number.\n");
+                        goto next_cmd;
+                    }
                     int next_val = str_to_int(args[i]);
                     
                     if (str_compare(cmd, "add")) {
