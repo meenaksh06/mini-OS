@@ -12,8 +12,8 @@ Unlike traditional C programs, this project implements its own versions of stand
 
 | Library | Functionality |
 | :--- | :--- |
-| **`math.c`** | Multiplication, division, modulo, absolute value, and boundary helpers. |
-| **`string.c`** | Length, copy, compare, tokenization (`str_split`), and int/string conversions. |
+| **`math.c`** | Multiplication, division, modulo, absolute value, and boundary helpers. Fully supports negative integers. |
+| **`string.c`** | Length, copy, compare, tokenization (`str_split`), and signed int/string conversions. |
 | **`memory.c`** | Virtual RAM management with a global region and custom `alloc`/`dealloc`. |
 | **`screen.c`** | ANSI-powered terminal clearing, cursor positioning, and text rendering. |
 | **`keyboard.c`** | Non-blocking input detection (`key_pressed`) and line reading. |
@@ -26,7 +26,7 @@ The Mini OS Shell provides a command-line interface to interact with the system.
 ### Available Commands:
 - `help`: Display the command directory.
 - `echo <text>`: Print text back to the screen (verifies string/memory integration).
-- `add/mul/div/mod <a> <b>`: Perform math logic using the custom math engine.
+- `add/mul/div/mod <a> <b>`: Perform math logic using the custom math engine (supports negative numbers).
 - `status`: Show diagnostic information about the virtual environment.
 - `clear`: Reset the terminal view.
 - `exit`: Shutdown the virtual OS.
