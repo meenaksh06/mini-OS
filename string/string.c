@@ -28,20 +28,32 @@ int str_compare(char* a, char* b) {
 int str_to_int(char* str) {
     int num = 0;
     int i = 0;
+    int sign = 1;
+
+    if (str[0] == '-') {
+        sign = -1;
+        i = 1;
+    }
 
     while (str[i] != '\0') {
         num = num * 10 + (str[i] - '0');
         i++;
     }
 
-    return num;
+    return num * sign;
 }
 
 char* int_to_str(int num) {
     char* str = (char*) alloc(20);
 
     int i = 0;
+    int is_negative = 0;
     int temp = num;
+
+    if (temp < 0) {
+        is_negative = 1;
+        temp = -temp;
+    }
 
     if (temp == 0) {
         str[0] = '0';
@@ -52,6 +64,10 @@ char* int_to_str(int num) {
     while (temp > 0) {
         str[i++] = (temp % 10) + '0';
         temp /= 10;
+    }
+
+    if (is_negative) {
+        str[i++] = '-';
     }
 
     str[i] = '\0';
