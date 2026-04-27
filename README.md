@@ -26,7 +26,7 @@ The Mini OS Shell provides a command-line interface to interact with the system.
 ### Available Commands:
 - `help`: Display the command directory.
 - `echo <text>`: Print text back to the screen (verifies string/memory integration).
-- `add/mul/div/mod <a> <b>`: Perform math logic using the custom math engine (supports negative numbers).
+- `add/sub/mul/div/mod <a> <b>`: Perform math logic using the custom math engine (supports negative numbers).
 - `status`: Show diagnostic information about the virtual environment.
 - `clear`: Reset the terminal view.
 - `exit`: Shutdown the virtual OS.
