@@ -123,7 +123,16 @@ int main() {
         else if (str_compare(cmd, "status")) {
             print_string("System Status:\n");
             print_string("  OS: Mini OS v1.0\n");
-            print_string("  Memory: Virtual RAM Active\n");
+            print_string("  Memory Total:     1048576 bytes\n");
+            print_string("  Memory Used:      ");
+            print_string(int_to_str(mem_used()));
+            print_string(" bytes\n");
+            print_string("  Memory Available: ");
+            print_string(int_to_str(mem_available()));
+            print_string(" bytes\n");
+            if (mem_overflow()) {
+                print_string("  WARNING: Last allocation failed (memory overflow)\n");
+            }
             print_string("  Storage: VFS Initialized (Empty)\n");
         }
 
