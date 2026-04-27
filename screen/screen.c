@@ -11,4 +11,5 @@ void move_cursor(int x, int y) {
 
 void print_string(char* str) {
     printf("%s", str);
+    fflush(stdout);
 }
