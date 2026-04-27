@@ -77,10 +77,10 @@ int main() {
             print_string("  echo <text>            - Print back text\n");
             print_string("  add/sub/mul/div/mod    - Math operations (e.g. add 5 10)\n");
             print_string("  ls                     - List files in VFS\n");
-            print_string("  touch <name> [text]    - Create file\n");
-            print_string("  cat <name>             - Read file\n");
-            print_string("  append <name> <text>   - Append to file\n");
-            print_string("  rm <name>              - Delete file\n");
+            print_string("  touch <name> [text]    - Create a new file\n");
+            print_string("  read <name>            - Print file contents\n");
+            print_string("  write <name> <text>    - Append text to a file\n");
+            print_string("  rm <name>              - Delete a file\n");
             print_string("  run <counter|ping>     - Spawn a background task\n");
             print_string("  ps                     - List running processes\n");
             print_string("  kill <pid>             - Kill a background process\n");
@@ -164,7 +164,7 @@ int main() {
         else if (str_compare(cmd, "ls")) {
             vfs_list();
         }
-        else if (str_compare(cmd, "touch") || str_compare(cmd, "append")) {
+        else if (str_compare(cmd, "touch") || str_compare(cmd, "write")) {
             if (arg_count < 2) {
                 print_string("Error: Missing file name.\n");
                 goto next_cmd;
@@ -198,7 +198,7 @@ int main() {
             }
             dealloc(content);
         }
-        else if (str_compare(cmd, "cat")) {
+        else if (str_compare(cmd, "read")) {
             if (arg_count < 2) {
                 print_string("Error: Missing file name.\n");
                 goto next_cmd;
