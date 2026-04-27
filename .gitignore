@@ -1,3 +1,5 @@
 mini-os
 mini_os
 .DS_Store
+web/node_modules
+web/dist

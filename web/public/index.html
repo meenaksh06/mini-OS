@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MINI-OS · System Console</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background layers -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-3" aria-hidden="true"></div>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg class="logo-hex" viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 1L38.5 11.5V34.5L20 45L1.5 34.5V11.5L20 1Z" stroke="url(#hex-grad)" stroke-width="1.5"/>
+          <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="700" fill="url(#hex-grad)">OS</text>
+          <defs>
+            <linearGradient id="hex-grad" x1="0" y1="0" x2="40" y2="46" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#6366f1"/>
+              <stop offset="1" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="logo-text">
+          <span class="logo-name">MINI-OS</span>
+          <span class="logo-ver">Kernel v1.0 · Educational</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="pills">
+        <span class="pill pill-green"><span class="pill-dot"></span>Kernel Active</span>
+        <span class="pill pill-cyan"><span class="pill-dot"></span>VFS Mounted</span>
+        <span class="pill pill-purple"><span class="pill-dot"></span>Scheduler Ready</span>
+        <span class="pill pill-ai"><span class="pill-dot"></span>AI Correction</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="uptime-block">
+        <span class="uptime-label">UPTIME</span>
+        <span class="uptime-value" id="uptime">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── MAIN ───────────────────────────────────────────────── -->
+  <main class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- System info card -->
+      <div class="card">
+        <div class="card-hd"><span class="card-hd-dot"></span>SYSTEM INFO</div>
+        <dl class="info-grid">
+          <dt>Architecture</dt><dd><span class="badge">x86-sim</span></dd>
+          <dt>Virtual RAM</dt><dd><span class="badge badge-cyan">1 MB</span></dd>
+          <dt>Max Processes</dt><dd><span class="badge badge-purple">16</span></dd>
+          <dt>Max Files</dt><dd><span class="badge badge-green">10</span></dd>
+          <dt>Scheduler</dt><dd><span class="badge badge-amber">Round-Robin</span></dd>
+          <dt>Context Switch</dt><dd><span class="badge">ucontext</span></dd>
+        </dl>
+      </div>
+
+      <!-- Kernel modules -->
+      <div class="card">
+        <div class="card-hd"><span class="card-hd-dot"></span>KERNEL MODULES</div>
+        <ul class="module-list">
+          <li class="module">
+            <span class="mod-led led-green"></span>
+            <div>
+              <p class="mod-name">Memory Manager</p>
+              <p class="mod-sub">Bump allocator + free list</p>
+            </div>
+          </li>
+          <li class="module">
+            <span class="mod-led led-cyan"></span>
+            <div>
+              <p class="mod-name">Virtual File System</p>
+              <p class="mod-sub">In-memory inode store</p>
+            </div>
+          </li>
+          <li class="module">
+            <span class="mod-led led-purple"></span>
+            <div>
+              <p class="mod-name">Process Scheduler</p>
+              <p class="mod-sub">Cooperative round-robin</p>
+            </div>
+          </li>
+          <li class="module">
+            <span class="mod-led led-indigo"></span>
+            <div>
+              <p class="mod-name">Shell Interface</p>
+              <p class="mod-sub">Non-blocking readline</p>
+            </div>
+          </li>
+          <li class="module">
+            <span class="mod-led led-amber"></span>
+            <div>
+              <p class="mod-name">Security Layer</p>
+              <p class="mod-sub">Input validation & sanitize</p>
+            </div>
+          </li>
+          <li class="module">
+            <span class="mod-led led-rose"></span>
+            <div>
+              <p class="mod-name">Custom String Lib</p>
+              <p class="mod-sub">str_distance · str_contains · str_to_lower</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── AI FEATURES card (new) ── -->
+      <div class="card card-ai">
+        <div class="card-hd"><span class="card-hd-dot card-hd-dot-ai"></span>AI FEATURES</div>
+
+        <div class="ai-feature">
+          <div class="ai-feature-header">
+            <span class="ai-tag">Levenshtein Distance</span>
+            <span class="ai-algo">O(m·n)</span>
+          </div>
+          <p class="ai-desc">"Did you mean?" — typo-tolerant command correction built entirely from scratch in C. Matches mistyped commands within edit distance&nbsp;≤&nbsp;2.</p>
+          <div class="ai-fns">
+            <code class="ai-fn">str_distance(a, b)</code>
+            <code class="ai-fn">str_contains(h, n)</code>
+            <code class="ai-fn">str_to_lower(s)</code>
+          </div>
+        </div>
+
+        <div class="ai-divider"></div>
+
+        <p class="ai-try-label">Try typo correction live:</p>
+        <div class="ai-demos">
+          <button class="ai-demo-btn" data-cmd="hepl" title="→ Did you mean 'help'?">
+            <span class="ai-typo">hepl</span>
+            <span class="ai-arrow">→</span>
+            <span class="ai-correct">help</span>
+          </button>
+          <button class="ai-demo-btn" data-cmd="statu" title="→ Did you mean 'status'?">
+            <span class="ai-typo">statu</span>
+            <span class="ai-arrow">→</span>
+            <span class="ai-correct">status</span>
+          </button>
+          <button class="ai-demo-btn" data-cmd="tuch test" title="→ Did you mean 'touch'?">
+            <span class="ai-typo">tuch</span>
+            <span class="ai-arrow">→</span>
+            <span class="ai-correct">touch</span>
+          </button>
+          <button class="ai-demo-btn" data-cmd="exitt" title="→ Did you mean 'exit'?">
+            <span class="ai-typo">exitt</span>
+            <span class="ai-arrow">→</span>
+            <span class="ai-correct">exit</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick commands -->
+      <div class="card">
+        <div class="card-hd"><span class="card-hd-dot"></span>QUICK COMMANDS</div>
+        <div class="cmd-grid">
+          <button class="cmd-btn" data-cmd="help">help</button>
+          <button class="cmd-btn" data-cmd="status">status</button>
+          <button class="cmd-btn cmd-cyan" data-cmd="ls">ls</button>
+          <button class="cmd-btn cmd-cyan" data-cmd="echo Hello World">echo</button>
+          <button class="cmd-btn cmd-green" data-cmd="touch notes Hello World">touch notes</button>
+          <button class="cmd-btn cmd-green" data-cmd="read notes">read notes</button>
+          <button class="cmd-btn cmd-green" data-cmd="write notes More text">write notes</button>
+          <button class="cmd-btn cmd-green" data-cmd="rm notes">rm notes</button>
+          <button class="cmd-btn cmd-amber" data-cmd="add 10 20 30">add 10 20 30</button>
+          <button class="cmd-btn cmd-amber" data-cmd="mul 6 7">mul 6 7</button>
+          <button class="cmd-btn cmd-amber" data-cmd="div 100 4">div 100 4</button>
+          <button class="cmd-btn cmd-rose" data-cmd="clear">clear</button>
+        </div>
+      </div>
+
+      <!-- Architecture diagram -->
+      <div class="card">
+        <div class="card-hd"><span class="card-hd-dot"></span>ARCHITECTURE</div>
+        <div class="arch">
+          <div class="arch-layer arch-shell">Shell + AI Correction</div>
+          <div class="arch-arrow">▼</div>
+          <div class="arch-row">
+            <div class="arch-layer arch-vfs">VFS</div>
+            <div class="arch-layer arch-proc">Sched</div>
+            <div class="arch-layer arch-sec">Sec</div>
+          </div>
+          <div class="arch-arrow">▼</div>
+          <div class="arch-layer arch-str">String · str_distance · str_contains</div>
+          <div class="arch-arrow">▼</div>
+          <div class="arch-layer arch-mem">Memory Manager · 1 MB Virtual RAM</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- TERMINAL SECTION -->
+    <section class="term-section">
+      <div class="term-card" id="term-card">
+
+        <!-- macOS-style title bar -->
+        <div class="term-bar">
+          <div class="term-dots">
+            <span class="tdot tdot-red"></span>
+            <span class="tdot tdot-yellow"></span>
+            <span class="tdot tdot-green"></span>
+          </div>
+          <div class="term-title">
+            <span class="term-title-path">mini-os</span>
+            <span class="term-title-sep">—</span>
+            <span class="term-title-shell">zsh</span>
+          </div>
+          <div class="term-conn" id="conn">
+            <span class="conn-dot" id="conn-dot"></span>
+            <span id="conn-text">Connecting…</span>
+          </div>
+        </div>
+
+        <!-- xterm mount point -->
+        <div class="term-body" id="terminal"></div>
+      </div>
+
+      <!-- Bottom stats strip -->
+      <div class="stats-strip">
+        <div class="stat">
+          <span class="stat-icon">⚡</span>
+          <span class="stat-lbl">Memory Model</span>
+          <span class="stat-val">Bump Alloc + Free List</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-icon">⟳</span>
+          <span class="stat-lbl">Context Switch</span>
+          <span class="stat-val">ucontext · swapcontext</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-icon">◎</span>
+          <span class="stat-lbl">Scheduling</span>
+          <span class="stat-val">Cooperative Round-Robin</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-icon">◈</span>
+          <span class="stat-lbl">Storage</span>
+          <span class="stat-val">No Disk · Pure RAM</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-icon">🔒</span>
+          <span class="stat-lbl">Input Guard</span>
+          <span class="stat-val">100-byte + ASCII filter</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-icon">✦</span>
+          <span class="stat-lbl">AI Correction</span>
+          <span class="stat-val">Levenshtein · edit dist ≤ 2</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
