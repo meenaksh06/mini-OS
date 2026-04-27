@@ -50,6 +50,7 @@ int main() {
             print_string("  cat <name>          - Read file\n");
             print_string("  append <name> <text>- Append to file\n");
             print_string("  rm <name>           - Delete file\n");
+            print_string("  chat <msg>          - Talk to assistant\n");
             print_string("  status              - Show system status\n");
             print_string("  clear               - Clear the screen\n");
             print_string("  exit                - Shutdown OS\n");
@@ -70,7 +71,11 @@ int main() {
                  str_compare(cmd, "mod")) {
 
             if (arg_count < 3) {
-                print_string("Error: Missing arguments. Use: <cmd> <a> <b> [c] ...\n");
+                print_string("Error: The '");
+                print_string(cmd);
+                print_string("' command requires numbers. Example: '");
+                print_string(cmd);
+                print_string(" 5 10'\n");
                 goto next_cmd;
             }
 
@@ -103,18 +108,14 @@ int main() {
                 }
                 else if (str_compare(cmd, "div")) {
                     if (next_val == 0) {
-                        print_string("Error: Division by zero at argument ");
-                        print_string(int_to_str(i));
-                        print_string("\n");
+                        print_string("Error: Cannot divide by zero. It breaks the universe!\n");
                         goto next_cmd;
                     }
                     res = divide(res, next_val);
                 }
                 else if (str_compare(cmd, "mod")) {
                     if (next_val == 0) {
-                        print_string("Error: Modulo by zero at argument ");
-                        print_string(int_to_str(i));
-                        print_string("\n");
+                        print_string("Error: Cannot modulo by zero. It breaks the universe!\n");
                         goto next_cmd;
                     }
                     res = mod(res, next_val);
@@ -130,8 +131,16 @@ int main() {
         else if (str_compare(cmd, "status")) {
             print_string("System Status:\n");
             print_string("  OS: Mini OS v1.0\n");
-<<<<<<< HEAD
-            print_string("  Memory: Virtual RAM Active\n");
+            print_string("  Memory Total:     1048576 bytes\n");
+            print_string("  Memory Used:      ");
+            print_string(int_to_str(mem_used()));
+            print_string(" bytes\n");
+            print_string("  Memory Available: ");
+            print_string(int_to_str(mem_available()));
+            print_string(" bytes\n");
+            if (mem_overflow()) {
+                print_string("  WARNING: Last allocation failed (memory overflow)\n");
+            }
             print_string("  Storage: VFS Active\n");
         }
 
@@ -141,7 +150,9 @@ int main() {
         }
         else if (str_compare(cmd, "touch") || str_compare(cmd, "append")) {
             if (arg_count < 2) {
-                print_string("Error: Missing file name.\n");
+                print_string("Error: Please specify a file name. Example: '");
+                print_string(cmd);
+                print_string(" notes.txt'\n");
                 goto next_cmd;
             }
             char* name = args[1];
@@ -178,30 +189,59 @@ int main() {
         }
         else if (str_compare(cmd, "cat")) {
             if (arg_count < 2) {
-                print_string("Error: Missing file name.\n");
+                print_string("Error: Please specify a file name. Example: '");
+                print_string(cmd);
+                print_string(" notes.txt'\n");
                 goto next_cmd;
             }
             vfs_read(args[1]);
         }
         else if (str_compare(cmd, "rm")) {
             if (arg_count < 2) {
-                print_string("Error: Missing file name.\n");
+                print_string("Error: Please specify a file name. Example: '");
+                print_string(cmd);
+                print_string(" notes.txt'\n");
                 goto next_cmd;
             }
             vfs_delete(args[1]);
-=======
-            print_string("  Memory Total:     1048576 bytes\n");
-            print_string("  Memory Used:      ");
-            print_string(int_to_str(mem_used()));
-            print_string(" bytes\n");
-            print_string("  Memory Available: ");
-            print_string(int_to_str(mem_available()));
-            print_string(" bytes\n");
-            if (mem_overflow()) {
-                print_string("  WARNING: Last allocation failed (memory overflow)\n");
+        }
+
+        // ---------------- CHAT ASSISTANT ----------------
+        else if (str_compare(cmd, "chat")) {
+            if (arg_count < 2) {
+                print_string("Assistant: Hi! What do you want to talk about?\n");
+                goto next_cmd;
             }
-            print_string("  Storage: VFS Initialized (Empty)\n");
->>>>>>> df8fc2104d8a8c8ec358b039066ad034e58d37f7
+            int total_len = 0;
+            for (int i = 1; i < arg_count; i++) total_len += str_len(args[i]) + 1;
+            char* msg = (char*) alloc(total_len + 1);
+            if (!msg) {
+                print_string("Error: Out of memory for chat.\n");
+                goto next_cmd;
+            }
+            int pos = 0;
+            for (int i = 1; i < arg_count; i++) {
+                int len = str_len(args[i]);
+                for (int k = 0; k < len; k++) msg[pos++] = args[i][k];
+                if (i < arg_count - 1) msg[pos++] = ' ';
+            }
+            msg[pos] = '\0';
+            str_to_lower(msg);
+
+            if (str_contains(msg, "hello") || str_contains(msg, "hi")) {
+                print_string("Assistant: Hello! I am mini-OS, your virtual assistant.\n");
+            } else if (str_contains(msg, "who") || str_contains(msg, "creator")) {
+                print_string("Assistant: I was created as a custom bare-metal OS project.\n");
+            } else if (str_contains(msg, "time")) {
+                print_string("Assistant: I don't have a hardware clock yet, but I'm living in the moment!\n");
+            } else if (str_contains(msg, "joke")) {
+                print_string("Assistant: Why do programmers prefer dark mode? Because light attracts bugs!\n");
+            } else if (str_contains(msg, "how")) {
+                print_string("Assistant: I run entirely in Virtual RAM using custom C libraries.\n");
+            } else {
+                print_string("Assistant: I am just a mini assistant. Try asking me for a joke, or say hello!\n");
+            }
+            dealloc(msg);
         }
 
         // ---------------- CLEAR ----------------
@@ -218,9 +258,31 @@ int main() {
 
         // ---------------- UNKNOWN ----------------
         else {
-            print_string("Unknown command: ");
+            print_string("Unknown command: '");
             print_string(cmd);
-            print_string("\nType 'help' for list of commands.\n");
+            print_string("'\n");
+            
+            char* known_cmds[] = {"help", "echo", "add", "sub", "mul", "div", "mod", "status", "clear", "exit", "ls", "touch", "cat", "append", "rm", "chat"};
+            int num_cmds = 16;
+            
+            int best_dist = 999;
+            char* best_match = 0;
+            
+            for (int i = 0; i < num_cmds; i++) {
+                int d = str_distance(cmd, known_cmds[i]);
+                if (d < best_dist) {
+                    best_dist = d;
+                    best_match = known_cmds[i];
+                }
+            }
+            
+            if (best_dist <= 2) {
+                print_string("Did you mean '");
+                print_string(best_match);
+                print_string("'?\n");
+            } else {
+                print_string("Type 'help' for list of commands.\n");
+            }
         }
 
     next_cmd:

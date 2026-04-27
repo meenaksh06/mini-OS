@@ -4,7 +4,7 @@ A minimal operating system shell built entirely from scratch in C, featuring cus
 
 ## 🚀 Overview
 
-In Phase 1, we have established the foundational "engine" of the OS. This includes five core libraries for memory management, string manipulation, math, screen rendering, and keyboard interaction. The system boots into a functional interactive shell that parses and executes commands in real-time.
+In Phase 1, we have established the foundational "engine" of the OS. This includes core libraries for memory management, string manipulation, math, screen rendering, and keyboard interaction. The system boots into a functional interactive shell that parses and executes commands in real-time. Additionally, Phase 2 features such as a Virtual File System (VFS), Command Auto-Correction, Error Intelligence, and a Mini Chat Assistant have been integrated.
 
 ## 🛠️ Core Libraries (The Engine)
 
@@ -29,6 +29,7 @@ The Mini OS Shell provides a command-line interface to interact with the system.
 - `echo <text>`: Print text back to the screen (verifies string/memory integration).
 - `add/sub/mul/div/mod <a> <b>`: Perform math logic using the custom math engine (supports negative numbers).
 - `ls`, `touch`, `cat`, `append`, `rm`: Virtual File System (VFS) operations.
+- `chat <message>`: Talk to the built-in virtual assistant.
 - `status`: Show diagnostic information about the virtual environment.
 - `clear`: Reset the terminal view.
 - `exit`: Shutdown the virtual OS.

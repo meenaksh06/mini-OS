@@ -109,3 +109,62 @@ char** str_split(char* str, char delim, int* count) {
     *count = seg;
     return res;
 }
+
+int str_distance(char* a, char* b) {
+    int len_a = str_len(a);
+    int len_b = str_len(b);
+    
+    int matrix[20][20];
+    
+    if (len_a >= 20 || len_b >= 20) return 999;
+
+    for (int i = 0; i <= len_a; i++) matrix[i][0] = i;
+    for (int j = 0; j <= len_b; j++) matrix[0][j] = j;
+
+    for (int i = 1; i <= len_a; i++) {
+        for (int j = 1; j <= len_b; j++) {
+            int cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
+            
+            int del = matrix[i - 1][j] + 1;
+            int ins = matrix[i][j - 1] + 1;
+            int sub = matrix[i - 1][j - 1] + cost;
+            
+            int min = del < ins ? del : ins;
+            min = sub < min ? sub : min;
+            
+            matrix[i][j] = min;
+        }
+    }
+    
+    return matrix[len_a][len_b];
+}
+
+int str_contains(char* haystack, char* needle) {
+    int h_len = str_len(haystack);
+    int n_len = str_len(needle);
+    
+    if (n_len == 0) return 1;
+    if (h_len < n_len) return 0;
+    
+    for (int i = 0; i <= h_len - n_len; i++) {
+        int match = 1;
+        for (int j = 0; j < n_len; j++) {
+            if (haystack[i+j] != needle[j]) {
+                match = 0;
+                break;
+            }
+        }
+        if (match) return 1;
+    }
+    return 0;
+}
+
+void str_to_lower(char* str) {
+    int i = 0;
+    while (str[i]) {
+        if (str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = str[i] + 32;
+        }
+        i++;
+    }
+}
