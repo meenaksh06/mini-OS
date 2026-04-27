@@ -18,6 +18,7 @@ Unlike traditional C programs, this project implements its own versions of stand
 | **`screen.c`** | ANSI-powered terminal clearing, cursor positioning, and text rendering. |
 | **`keyboard.c`** | Non-blocking input detection (`key_pressed`) and line reading. |
 | **`security.c`** | Input sanitization to prevent buffer overflows and invalid memory access. |
+| **`vfs.c`** | Virtual File System for in-memory file creation, reading, updating, and deletion. |
 
 ## 💻 The Shell
 
@@ -27,6 +28,7 @@ The Mini OS Shell provides a command-line interface to interact with the system.
 - `help`: Display the command directory.
 - `echo <text>`: Print text back to the screen (verifies string/memory integration).
 - `add/sub/mul/div/mod <a> <b>`: Perform math logic using the custom math engine (supports negative numbers).
+- `ls`, `touch`, `cat`, `append`, `rm`: Virtual File System (VFS) operations.
 - `status`: Show diagnostic information about the virtual environment.
 - `clear`: Reset the terminal view.
 - `exit`: Shutdown the virtual OS.
@@ -39,7 +41,7 @@ The Mini OS Shell provides a command-line interface to interact with the system.
 
 ### Build Instructions:
 ```bash
-gcc -I. main.c math/math.c string/string.c memory/memory.c screen/screen.c keyboard/keyboard.c security/security.c -o mini-os
+gcc -I. main.c math/math.c string/string.c memory/memory.c screen/screen.c keyboard/keyboard.c security/security.c vfs/vfs.c -o mini-os
 ```
 
 ### Execution:

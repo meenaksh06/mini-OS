@@ -4,6 +4,7 @@
 #include "screen/screen.h"
 #include "keyboard/keyboard.h"
 #include "security/security.h"
+#include "vfs/vfs.h"
 
 void show_boot_screen() {
     clear_screen();
@@ -21,6 +22,7 @@ void show_boot_screen() {
 
 int main() {
     init_memory();
+    vfs_init();
     show_boot_screen();
 
     while (1) {
@@ -43,6 +45,11 @@ int main() {
             print_string("Available Commands:\n");
             print_string("  echo <text>      - Print back text\n");
             print_string("  add/sub/mul/div/mod - Math operations (e.g. sub 10 5)\n");
+            print_string("  ls                  - List files in VFS\n");
+            print_string("  touch <name> [text] - Create file\n");
+            print_string("  cat <name>          - Read file\n");
+            print_string("  append <name> <text>- Append to file\n");
+            print_string("  rm <name>           - Delete file\n");
             print_string("  status              - Show system status\n");
             print_string("  clear               - Clear the screen\n");
             print_string("  exit                - Shutdown OS\n");
@@ -124,7 +131,63 @@ int main() {
             print_string("System Status:\n");
             print_string("  OS: Mini OS v1.0\n");
             print_string("  Memory: Virtual RAM Active\n");
-            print_string("  Storage: VFS Initialized (Empty)\n");
+            print_string("  Storage: VFS Active\n");
+        }
+
+        // ---------------- VFS COMMANDS ----------------
+        else if (str_compare(cmd, "ls")) {
+            vfs_list();
+        }
+        else if (str_compare(cmd, "touch") || str_compare(cmd, "append")) {
+            if (arg_count < 2) {
+                print_string("Error: Missing file name.\n");
+                goto next_cmd;
+            }
+            char* name = args[1];
+            
+            // Build content string
+            int content_len = 0;
+            for (int i = 2; i < arg_count; i++) {
+                content_len += str_len(args[i]) + 1; // +1 for space
+            }
+            if (content_len == 0) content_len = 1; // For empty files
+            
+            char* content = (char*) alloc(content_len);
+            if (!content) {
+                print_string("Error: Out of memory.\n");
+                goto next_cmd;
+            }
+            
+            int pos = 0;
+            for (int i = 2; i < arg_count; i++) {
+                int len = str_len(args[i]);
+                for (int k = 0; k < len; k++) {
+                    content[pos++] = args[i][k];
+                }
+                if (i < arg_count - 1) content[pos++] = ' ';
+            }
+            content[pos] = '\0';
+            
+            if (str_compare(cmd, "touch")) {
+                vfs_create(name, content);
+            } else {
+                vfs_update(name, content);
+            }
+            dealloc(content); // Conceptual cleanup
+        }
+        else if (str_compare(cmd, "cat")) {
+            if (arg_count < 2) {
+                print_string("Error: Missing file name.\n");
+                goto next_cmd;
+            }
+            vfs_read(args[1]);
+        }
+        else if (str_compare(cmd, "rm")) {
+            if (arg_count < 2) {
+                print_string("Error: Missing file name.\n");
+                goto next_cmd;
+            }
+            vfs_delete(args[1]);
         }
 
         // ---------------- CLEAR ----------------
