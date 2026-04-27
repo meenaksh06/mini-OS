@@ -130,6 +130,7 @@ int main() {
         else if (str_compare(cmd, "status")) {
             print_string("System Status:\n");
             print_string("  OS: Mini OS v1.0\n");
+<<<<<<< HEAD
             print_string("  Memory: Virtual RAM Active\n");
             print_string("  Storage: VFS Active\n");
         }
@@ -188,6 +189,19 @@ int main() {
                 goto next_cmd;
             }
             vfs_delete(args[1]);
+=======
+            print_string("  Memory Total:     1048576 bytes\n");
+            print_string("  Memory Used:      ");
+            print_string(int_to_str(mem_used()));
+            print_string(" bytes\n");
+            print_string("  Memory Available: ");
+            print_string(int_to_str(mem_available()));
+            print_string(" bytes\n");
+            if (mem_overflow()) {
+                print_string("  WARNING: Last allocation failed (memory overflow)\n");
+            }
+            print_string("  Storage: VFS Initialized (Empty)\n");
+>>>>>>> df8fc2104d8a8c8ec358b039066ad034e58d37f7
         }
 
         // ---------------- CLEAR ----------------
