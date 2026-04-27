@@ -5,6 +5,35 @@
 #include "keyboard/keyboard.h"
 #include "security/security.h"
 #include "vfs/vfs.h"
+#include "process/process.h"
+
+/* ── Background task demos ── */
+
+static int counter_ticks = 0;
+
+void task_counter() {
+    while (1) {
+        counter_ticks++;
+        if (counter_ticks % 500 == 0) {
+            print_string("\r\n[counter] ticks: ");
+            print_string(int_to_str(counter_ticks));
+            print_string("\r\nmini-os >> ");
+        }
+        process_yield();
+    }
+}
+
+void task_ping() {
+    for (int i = 1; i <= 5; i++) {
+        print_string("\r\n[ping] pong ");
+        print_string(int_to_str(i));
+        print_string("\r\nmini-os >> ");
+        for (int j = 0; j < 200; j++) process_yield();
+    }
+    print_string("\r\n[ping] done\r\nmini-os >> ");
+}
+
+/* ── Shell ── */
 
 void show_boot_screen() {
     clear_screen();
@@ -23,12 +52,14 @@ void show_boot_screen() {
 int main() {
     init_memory();
     vfs_init();
+    process_init();
+    scheduler_init();
     show_boot_screen();
 
     while (1) {
         print_string("\nmini-os >> ");
 
-        char* input = read_line();
+        char* input = read_line_bg();
         if (str_len(input) == 0) continue;
 
         if (!validate_input(input)) {
@@ -43,16 +74,19 @@ int main() {
         // ---------------- HELP ----------------
         if (str_compare(cmd, "help")) {
             print_string("Available Commands:\n");
-            print_string("  echo <text>      - Print back text\n");
-            print_string("  add/sub/mul/div/mod - Math operations (e.g. sub 10 5)\n");
-            print_string("  ls                  - List files in VFS\n");
-            print_string("  touch <name> [text] - Create file\n");
-            print_string("  cat <name>          - Read file\n");
-            print_string("  append <name> <text>- Append to file\n");
-            print_string("  rm <name>           - Delete file\n");
-            print_string("  status              - Show system status\n");
-            print_string("  clear               - Clear the screen\n");
-            print_string("  exit                - Shutdown OS\n");
+            print_string("  echo <text>            - Print back text\n");
+            print_string("  add/sub/mul/div/mod    - Math operations (e.g. add 5 10)\n");
+            print_string("  ls                     - List files in VFS\n");
+            print_string("  touch <name> [text]    - Create file\n");
+            print_string("  cat <name>             - Read file\n");
+            print_string("  append <name> <text>   - Append to file\n");
+            print_string("  rm <name>              - Delete file\n");
+            print_string("  run <counter|ping>     - Spawn a background task\n");
+            print_string("  ps                     - List running processes\n");
+            print_string("  kill <pid>             - Kill a background process\n");
+            print_string("  status                 - Show system/memory status\n");
+            print_string("  clear                  - Clear the screen\n");
+            print_string("  exit                   - Shutdown OS\n");
         }
 
         // ---------------- ECHO ----------------
@@ -126,15 +160,6 @@ int main() {
             print_string("\n");
         }
 
-        // ---------------- STATUS ----------------
-        else if (str_compare(cmd, "status")) {
-            print_string("System Status:\n");
-            print_string("  OS: Mini OS v1.0\n");
-<<<<<<< HEAD
-            print_string("  Memory: Virtual RAM Active\n");
-            print_string("  Storage: VFS Active\n");
-        }
-
         // ---------------- VFS COMMANDS ----------------
         else if (str_compare(cmd, "ls")) {
             vfs_list();
@@ -145,36 +170,33 @@ int main() {
                 goto next_cmd;
             }
             char* name = args[1];
-            
-            // Build content string
+
             int content_len = 0;
-            for (int i = 2; i < arg_count; i++) {
-                content_len += str_len(args[i]) + 1; // +1 for space
-            }
-            if (content_len == 0) content_len = 1; // For empty files
-            
-            char* content = (char*) alloc(content_len);
+            for (int i = 2; i < arg_count; i++)
+                content_len += str_len(args[i]) + 1;
+            if (content_len == 0) content_len = 1;
+
+            char* content = (char*)alloc(content_len);
             if (!content) {
                 print_string("Error: Out of memory.\n");
                 goto next_cmd;
             }
-            
+
             int pos = 0;
             for (int i = 2; i < arg_count; i++) {
                 int len = str_len(args[i]);
-                for (int k = 0; k < len; k++) {
+                for (int k = 0; k < len; k++)
                     content[pos++] = args[i][k];
-                }
                 if (i < arg_count - 1) content[pos++] = ' ';
             }
             content[pos] = '\0';
-            
+
             if (str_compare(cmd, "touch")) {
                 vfs_create(name, content);
             } else {
                 vfs_update(name, content);
             }
-            dealloc(content); // Conceptual cleanup
+            dealloc(content);
         }
         else if (str_compare(cmd, "cat")) {
             if (arg_count < 2) {
@@ -189,7 +211,57 @@ int main() {
                 goto next_cmd;
             }
             vfs_delete(args[1]);
-=======
+        }
+
+        // ---------------- RUN ----------------
+        else if (str_compare(cmd, "run")) {
+            if (arg_count < 2) {
+                print_string("Usage: run <counter|ping>\n");
+            } else if (str_compare(args[1], "counter")) {
+                int pid = process_spawn("counter", task_counter);
+                if (pid < 0) {
+                    print_string("Error: process table full\n");
+                } else {
+                    print_string("Spawned counter [pid ");
+                    print_string(int_to_str(pid));
+                    print_string("]\n");
+                }
+            } else if (str_compare(args[1], "ping")) {
+                int pid = process_spawn("ping", task_ping);
+                if (pid < 0) {
+                    print_string("Error: process table full\n");
+                } else {
+                    print_string("Spawned ping [pid ");
+                    print_string(int_to_str(pid));
+                    print_string("]\n");
+                }
+            } else {
+                print_string("Unknown task. Available: counter, ping\n");
+            }
+        }
+
+        // ---------------- PS ----------------
+        else if (str_compare(cmd, "ps")) {
+            process_print_all();
+        }
+
+        // ---------------- KILL ----------------
+        else if (str_compare(cmd, "kill")) {
+            if (arg_count < 2 || !is_numeric(args[1])) {
+                print_string("Usage: kill <pid>\n");
+            } else {
+                int pid = str_to_int(args[1]);
+                process_kill(pid);
+                print_string("Killed process ");
+                print_string(int_to_str(pid));
+                print_string("\n");
+            }
+        }
+
+        // ---------------- STATUS ----------------
+        else if (str_compare(cmd, "status")) {
+            print_string("System Status:\n");
+            print_string("  OS: Mini OS v1.0\n");
             print_string("  Memory Total:     1048576 bytes\n");
             print_string("  Memory Used:      ");
             print_string(int_to_str(mem_used()));
@@ -200,8 +272,7 @@ int main() {
             if (mem_overflow()) {
                 print_string("  WARNING: Last allocation failed (memory overflow)\n");
             }
-            print_string("  Storage: VFS Initialized (Empty)\n");
->>>>>>> df8fc2104d8a8c8ec358b039066ad034e58d37f7
+            print_string("  Storage: VFS Active\n");
         }
 
         // ---------------- CLEAR ----------------

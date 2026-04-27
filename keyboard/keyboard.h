@@ -2,6 +2,7 @@
 #define KEYBOARD_H
 
 char* read_line();
-int key_pressed();
+char* read_line_bg();
+int   key_pressed();
 
 #endif
