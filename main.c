@@ -80,8 +80,8 @@ int main() {
       print_string("  add/sub/mul/div/mod - Math operations (e.g. sub 10 5)\n");
       print_string("  ls                  - List files in VFS\n");
       print_string("  touch <name> [text] - Create file\n");
-      print_string("  cat <name>          - Read file\n");
-      print_string("  append <name> <text>- Append to file\n");
+      print_string("  read <name>         - Read file\n");
+      print_string("  write <name> <text> - Update file\n");
       print_string("  rm <name>           - Delete file\n");
       print_string("  status              - Show system status\n");
       print_string("  clear               - Clear the screen\n");
@@ -252,7 +252,7 @@ int main() {
 
       char *known_cmds[] = {"help", "echo",   "add",   "sub",  "mul", "div",
                             "mod",  "status", "clear", "exit", "ls",  "touch",
-                            "cat",  "append", "rm",    "chat"};
+                            "read", "write",  "rm",    "chat"};
       int num_cmds = 16;
 
       int best_dist = 999;
