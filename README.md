@@ -49,7 +49,7 @@ A lightweight filesystem implemented in RAM.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 mini-OS/
@@ -66,7 +66,7 @@ mini-OS/
 
 ---
 
-## 📊 Results & Conclusions
+## Results & Conclusions
 
 ### System Performance
 - **Memory Overhead**: The kernel and core libraries occupy < 64KB, leaving ~94% of virtual RAM for user processes and files.
