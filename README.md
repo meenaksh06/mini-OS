@@ -15,7 +15,7 @@ Mini-OS is an educational yet robust exploration into low-level systems programm
 
 The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—from string manipulation to memory allocation—is hand-crafted.
 
-### 🧠 Core Engine Modules
+### Core Engine Modules
 | Module | Description | Key Features |
 | :--- | :--- | :--- |
 | **Memory Engine** | 1MB Virtual RAM management. | Hybrid Bump & First-Fit allocator with block recycling. |
@@ -26,7 +26,7 @@ The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—fro
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 ### 1. AI-Assisted Command Correction
 Mini-OS doesn't just fail on typos; it thinks. Using the **Levenshtein Distance algorithm**, the shell calculates the edit distance between unknown inputs and registered system commands. 
