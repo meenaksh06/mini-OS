@@ -1,12 +1,12 @@
-# 🖥️ Mini OS - Phase 1
+# Mini OS - Phase 1
 
 A minimal operating system shell built entirely from scratch in C, featuring custom-implemented system libraries. This project demonstrates low-level systems programming by bypassing the standard C library for all core logic.
 
-## 🚀 Overview
+## Overview
 
 In Phase 1, we have established the foundational "engine" of the OS. This includes five core libraries for memory management, string manipulation, math, screen rendering, and keyboard interaction. The system boots into a functional interactive shell that parses and executes commands in real-time.
 
-## 🛠️ Core Libraries (The Engine)
+## Core Libraries (The Engine)
 
 Unlike traditional C programs, this project implements its own versions of standard functionality:
 
@@ -20,7 +20,7 @@ Unlike traditional C programs, this project implements its own versions of stand
 | **`security.c`** | Input sanitization to prevent buffer overflows and invalid memory access. |
 | **`vfs.c`** | Virtual File System for in-memory file creation, reading, updating, and deletion. |
 
-## 💻 The Shell
+## The Shell
 
 The Mini OS Shell provides a command-line interface to interact with the system.
 
