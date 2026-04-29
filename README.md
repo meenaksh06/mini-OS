@@ -79,7 +79,7 @@ mini-OS/
 
 ---
 
-## ⚙️ Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 - GCC Compiler
@@ -102,9 +102,9 @@ gcc -I. main.c math/math.c string/string.c memory/memory.c \
 
 ---
 
-## 📜 License
+## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Developed with ❤️ as a Deep Dive into Systems Programming.**
+**Developed withas a Deep Dive into Systems Programming.**
