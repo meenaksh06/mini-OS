@@ -1,4 +1,4 @@
-# 🌌 Mini-OS: AI-Assisted Kernel & Shell
+# Mini-OS: AI-Assisted Kernel & Shell
 
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Language](https://img.shields.io/badge/Language-C-orange.svg)
@@ -11,11 +11,11 @@ Mini-OS is an educational yet robust exploration into low-level systems programm
 
 ---
 
-## 🛠️ Project Foundation (Built From Scratch)
+## Project Foundation (Built From Scratch)
 
 The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—from string manipulation to memory allocation—is hand-crafted.
 
-### 🧠 Core Engine Modules
+### Core Engine Modules
 | Module | Description | Key Features |
 | :--- | :--- | :--- |
 | **Memory Engine** | 1MB Virtual RAM management. | Hybrid Bump & First-Fit allocator with block recycling. |
@@ -26,7 +26,7 @@ The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—fro
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 ### 1. AI-Assisted Command Correction
 Mini-OS doesn't just fail on typos; it thinks. Using the **Levenshtein Distance algorithm**, the shell calculates the edit distance between unknown inputs and registered system commands. 
@@ -50,7 +50,7 @@ A lightweight filesystem implemented in RAM.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 mini-OS/
@@ -67,7 +67,7 @@ mini-OS/
 
 ---
 
-## 📊 Results & Conclusions
+## Results & Conclusions
 
 ### System Performance
 - **Memory Overhead**: The kernel and core libraries occupy < 64KB, leaving ~94% of virtual RAM for user processes and files.
@@ -80,7 +80,7 @@ mini-OS/
 
 ---
 
-## ⚙️ Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 - GCC Compiler
@@ -103,9 +103,5 @@ gcc -I. main.c math/math.c string/string.c memory/memory.c \
 
 ---
 
-## 📜 License
+## License
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-**Developed with ❤️ as a Deep Dive into Systems Programming.**
