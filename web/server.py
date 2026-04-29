@@ -10,6 +10,7 @@ import subprocess
 import termios
 import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+import websocket
 
 import websockets
 
@@ -18,7 +19,6 @@ BINARY = os.path.abspath(os.path.join(ROOT, "..", "mini-os"))
 STATIC = os.path.join(ROOT, "public")
 HTTP_PORT = 3000
 WS_PORT   = 3001
-
 
 class _Static(SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):

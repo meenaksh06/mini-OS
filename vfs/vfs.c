@@ -23,6 +23,7 @@ void vfs_create(char* name, char* content) {
     }
 
     int slot = -1;
+
     for (int i = 0; i < MAX_FILES; i++) {
         if (!fs[i].is_used) {
             slot = i;
@@ -58,38 +59,6 @@ void vfs_read(char* name) {
         if (fs[i].is_used && str_compare(fs[i].name, name)) {
             print_string(fs[i].content);
             print_string("\n");
-            return;
-        }
-    }
-    print_string("Error: File not found.\n");
-}
-
-void vfs_update(char* name, char* added_content) {
-    for (int i = 0; i < MAX_FILES; i++) {
-        if (fs[i].is_used && str_compare(fs[i].name, name)) {
-            int old_len = fs[i].size;
-            int add_len = str_len(added_content);
-            char* new_content = (char*) alloc(old_len + add_len + 1);
-            
-            if (!new_content) {
-                print_string("Error: Out of memory.\n");
-                return;
-            }
-
-            for (int k = 0; k < old_len; k++) {
-                new_content[k] = fs[i].content[k];
-            }
-            for (int k = 0; k < add_len; k++) {
-                new_content[old_len + k] = added_content[k];
-            }
-            new_content[old_len + add_len] = '\0';
-
-            dealloc(fs[i].content);
-            
-            fs[i].content = new_content;
-            fs[i].size = old_len + add_len;
-
-            print_string("File updated.\n");
             return;
         }
     }
