@@ -1,4 +1,4 @@
-# 🌌 Mini-OS: AI-Assisted Kernel & Shell
+# Mini-OS: AI-Assisted Kernel & Shell
 
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Language](https://img.shields.io/badge/Language-C-orange.svg)
@@ -11,7 +11,7 @@ Mini-OS is an educational yet robust exploration into low-level systems programm
 
 ---
 
-## 🛠️ Project Foundation (Built From Scratch)
+## Project Foundation (Built From Scratch)
 
 The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—from string manipulation to memory allocation—is hand-crafted.
 
