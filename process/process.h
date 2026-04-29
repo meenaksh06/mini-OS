@@ -32,6 +32,7 @@ void process_print_all();
 /* Phase 2 — scheduler */
 void scheduler_init();
 void scheduler_tick();
+void scheduler_start_preemption();
 void process_yield();
 
 #endif

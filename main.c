@@ -55,6 +55,14 @@ int main() {
   vfs_init();
   process_init();
   scheduler_init();
+
+  // Initialize background demo tasks
+  process_spawn("counter", task_counter);
+  process_spawn("ping", task_ping);
+
+  // Enable Preemptive Scheduling (Timer Interrupts)
+  scheduler_start_preemption();
+
   show_boot_screen();
 
   while (1) {

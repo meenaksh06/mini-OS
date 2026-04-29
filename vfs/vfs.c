@@ -65,6 +65,25 @@ void vfs_read(char* name) {
     print_string("Error: File not found.\n");
 }
 
+void vfs_update(char* name, char* content) {
+    for (int i = 0; i < MAX_FILES; i++) {
+        if (fs[i].is_used && str_compare(fs[i].name, name)) {
+            dealloc(fs[i].content);
+            int c_len = str_len(content);
+            fs[i].content = (char*) alloc(c_len + 1);
+            if (!fs[i].content) {
+                print_string("Error: Out of memory.\n");
+                return;
+            }
+            str_copy(fs[i].content, content);
+            fs[i].size = c_len;
+            print_string("File updated.\n");
+            return;
+        }
+    }
+    print_string("Error: File not found.\n");
+}
+
 void vfs_delete(char* name) {
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs[i].is_used && str_compare(fs[i].name, name)) {

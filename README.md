@@ -19,7 +19,7 @@ The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—fro
 | Module | Description | Key Features |
 | :--- | :--- | :--- |
 | **Memory Engine** | 1MB Virtual RAM management. | Hybrid Bump & First-Fit allocator with block recycling. |
-| **Process Scheduler** | Cooperative multitasking kernel. | Round-robin scheduler with `ucontext` context switching. |
+| **Process Scheduler** | Preemptive multitasking kernel. | Round-robin scheduler with `setitimer` for true time-slicing. |
 | **VFS (Virtual FS)** | In-memory Unix-like filesystem. | Persistent (per-session) file nodes with CRUD operations. |
 | **Security Shield** | Input sanitization layer. | Buffer overflow protection and malicious command filtering. |
 | **AI Shell** | Intelligent CLI environment. | Levenshtein-based auto-correction and context-aware error handling. |
@@ -32,10 +32,11 @@ The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—fro
 Mini-OS doesn't just fail on typos; it thinks. Using the **Levenshtein Distance algorithm**, the shell calculates the edit distance between unknown inputs and registered system commands. 
 - *Input:* `echlo "Hello"` -> *AI Output:* `Did you mean 'echo'?`
 
-### 2. Multi-Tasking Kernel
-The system features a **Cooperative Round-Robin Scheduler**. Background tasks (like system monitors or pings) execute concurrently with the interactive shell without blocking user input.
+### 2. Preemptive Multi-Tasking Kernel
+The system features a **Preemptive Round-Robin Scheduler**. Using `setitimer` and `SIGALRM`, the kernel enforces true time-slicing (100ms quantum), ensuring no single process can monopolize the CPU.
 - **Process States**: `READY`, `RUNNING`, `TERMINATED`.
-- **Yielding**: Tasks voluntarily yield the CPU to maintain system responsiveness.
+- **Time-Slicing**: Context switches occur automatically via signal handlers, even if a task doesn't yield.
+- **Cooperative Yielding**: Tasks can still voluntarily yield the CPU via `process_yield()`.
 
 ### 3. Custom Memory Architecture
 Instead of `malloc`, Mini-OS uses a custom `alloc/dealloc` system managing a dedicated 1MB heap.

@@ -3,6 +3,9 @@
 #include "process.h"
 #include "../string/string.h"
 #include "../screen/screen.h"
+#include <signal.h>
+#include <sys/time.h>
+#include <stddef.h>
 
 static Process    table[MAX_PROCESSES];
 static int        next_pid    = 1;
@@ -106,4 +109,24 @@ void process_yield() {
         table[running_idx].state = PROC_READY;
         swapcontext(&table[running_idx].ctx, &sched_ctx);
     }
+}
+
+static void timer_handler(int sig) {
+    (void)sig;
+    process_yield();
+}
+
+void scheduler_start_preemption() {
+    struct sigaction sa;
+    sa.sa_handler = timer_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+    sigaction(SIGALRM, &sa, NULL);
+
+    struct itimerval timer;
+    timer.it_value.tv_sec = 0;
+    timer.it_value.tv_usec = 100000; // 100ms quantum
+    timer.it_interval.tv_sec = 0;
+    timer.it_interval.tv_usec = 100000;
+    setitimer(ITIMER_REAL, &timer, NULL);
 }
