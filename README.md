@@ -84,7 +84,7 @@ mini-OS/
 
 ### Prerequisites
 - GCC Compiler
-- Unix-like environment 
+- Unix-like environment (MacOS, Unix, WSL)
 
 ### Build & Run
 ```bash
