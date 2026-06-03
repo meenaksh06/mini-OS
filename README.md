@@ -7,7 +7,7 @@
 
 > **A minimal, high-performance operating system kernel and intelligent shell built entirely from scratch in C.** 
 
-Mini-OS is an educational yet robust exploration into low-level systems programming. By bypassing the standard C library (`libc`) for all core logic, this project implements its own memory management, process scheduling, virtual file system, and an AI-driven command interface.
+Mini-OS is an educational yet robust exploration into low-level systems programming. By bypassing the standard C library (`libc`) for all core logic, this project implements its own memory management, process scheduling, virtual file system, and an AI-driven.
 
 ---
 
