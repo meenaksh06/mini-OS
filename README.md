@@ -46,7 +46,7 @@ Instead of `malloc`, Mini-OS uses a custom `alloc/dealloc` system managing a ded
 ### 4. Virtual File System (VFS)
 A lightweight filesystem implemented in RAM.
 - Commands: `ls`, `touch`, `read`, `write`, `rm`.
-- Supports file creation with arbitrary content length (within memory limits).
+- Supports file creation with arbitrary content length.
 
 ---
 
