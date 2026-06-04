@@ -104,4 +104,4 @@ gcc -I. main.c math/math.c string/string.c memory/memory.c \
 ---
 
 ## License
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See `LICENSE` for .
