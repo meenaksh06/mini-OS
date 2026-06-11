@@ -13,7 +13,7 @@ Mini-OS is an educational yet robust exploration into low-level systems programm
 
 ## Project Foundation (Built From Scratch)
 
-The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—from string manipulation to memory allocation—is hand-crafted.
+The core philosophy of Mini-OS is **zero dependency**. Every byte of logic—from string manipulation to memory allocation is handcrafted.
 
 ### Core Engine Modules
 | Module | Description | Key Features |
